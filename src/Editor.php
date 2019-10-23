@@ -23,12 +23,13 @@ class Editor extends Field
         $id = $this->formatName($this->id);
 
         $token = csrf_token();*/
+	    $config = NEditor::config('config', []);
+	
+	    $config = json_encode(array_merge($config, $this->options));
 
         $this->script = <<<EOT
         UE.delEditor("ssi_ueditor_{$this->id}");
-        var ue = UE.getEditor('ssi_ueditor_{$this->id}',{
-            initialFrameHeight:360,//设置编辑器高度
-        }); 
+        var ue = UE.getEditor('ssi_ueditor_{$this->id}',{$config});
         ue.ready(function () {
             ue.execCommand('serverparam', '_token', '{{ csrf_token() }}');
         });
